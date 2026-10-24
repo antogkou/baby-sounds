@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Baby Sounds</title>
+<meta name="description" content="Play-time voices and sleep sounds for little babies. Works offline.">
+<meta name="theme-color" content="#111111">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Baby Sounds">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-view="home">
+
+<!-- HOME -->
+<main id="home" class="view" aria-labelledby="home-title">
+  <header class="home-head">
+    <h1 id="home-title">Baby Sounds</h1>
+    <p class="sub">Voices and sounds for your little one</p>
+  </header>
+  <div class="mode-cards">
+    <button class="mode-card play-card" id="go-play" type="button">
+      <span class="mc-art" aria-hidden="true">
+        <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#fff"/><circle cx="50" cy="50" r="32" fill="#111"/><circle cx="50" cy="50" r="20" fill="#fff"/><circle cx="50" cy="50" r="9" fill="#e53935"/></svg>
+      </span>
+      <span class="mc-text"><strong>Play time</strong><span>Contrast shapes, sing-song voice, peekaboo</span></span>
+    </button>
+    <button class="mode-card sleep-card" id="go-sleep" type="button">
+      <span class="mc-art" aria-hidden="true">
+        <svg viewBox="0 0 100 100"><path d="M64 14a38 38 0 1 0 22 58A32 32 0 0 1 64 14z" fill="#ffd54f"/><circle cx="26" cy="22" r="3" fill="#ffe9a8"/><circle cx="80" cy="30" r="2" fill="#ffe9a8"/></svg>
+      </span>
+      <span class="mc-text"><strong>Sleep</strong><span>White noise, heartbeat, shushing, lullabies</span></span>
+    </button>
+  </div>
+  <details class="safety" open>
+    <summary>Safe listening</summary>
+    <ul>
+      <li>Keep the phone at least 2 metres (about 7 feet) from your baby.</li>
+      <li>Keep the volume low, around 50&nbsp;dB, about as loud as a quiet shower.</li>
+      <li>Never put the phone in the crib or cot.</li>
+      <li>Use the sleep timer so sound doesn't play all night.</li>
+    </ul>
+  </details>
+  <p class="foot">Works offline. To install it, tap Share, then Add to Home Screen.</p>
+</main>
+
+<!-- PLAY -->
+<section id="play" class="view" aria-label="Play time" hidden>
+  <div class="topbar">
+    <button class="icon-btn" data-back type="button" aria-label="Back">
+      <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <h2>Play time</h2>
+    <div class="lang" role="group" aria-label="Voice language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="el" aria-pressed="false">ΕΛ</button>
+    </div>
+  </div>
+  <div class="stage" id="stage">
+    <canvas id="shapes" aria-label="Moving black, white and red shapes. Tap a shape to make it bounce."></canvas>
+    <div class="peek" id="peek" hidden aria-live="polite">
+      <div class="peek-curtain"><span id="peek-q">Where's the baby?</span></div>
+      <svg class="peek-face" viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="92" fill="#fff" stroke="#111" stroke-width="10"/>
+        <circle cx="68" cy="82" r="16" fill="#111"/><circle cx="132" cy="82" r="16" fill="#111"/>
+        <circle cx="73" cy="77" r="5" fill="#fff"/><circle cx="137" cy="77" r="5" fill="#fff"/>
+        <path d="M55 120 Q100 172 145 120 Z" fill="#e53935" stroke="#111" stroke-width="8" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <p class="hint" id="play-hint">Tap the shapes</p>
+  </div>
+  <div class="play-pad">
+    <button class="big peekaboo" id="btn-peek" type="button">Peekaboo!</button>
+    <div class="grid4">
+      <button class="pad" data-play="talk" type="button"><span aria-hidden="true">💬</span>Talk</button>
+      <button class="pad" data-play="song" type="button"><span aria-hidden="true">🎵</span>Song</button>
+      <button class="pad" data-play="rattle" type="button"><span aria-hidden="true">🪇</span>Rattle</button>
+      <button class="pad" data-play="chime" type="button"><span aria-hidden="true">🔔</span>Chime</button>
+      <button class="pad" data-play="coo" type="button"><span aria-hidden="true">🕊️</span>Coo</button>
+      <button class="pad" data-play="pop" type="button"><span aria-hidden="true">🫧</span>Bubbles</button>
+      <button class="pad" data-play="invert" type="button"><span aria-hidden="true">◐</span>Flip</button>
+      <button class="pad" data-play="stop" type="button"><span aria-hidden="true">■</span>Quiet</button>
+    </div>
+    <label class="vol">
+      <span aria-hidden="true">🔈</span>
+      <input type="range" min="0" max="100" step="1" data-volume aria-label="Volume">
+      <span aria-hidden="true">🔊</span>
+    </label>
+    <p class="silent-hint">No sound? Check the silent switch is off and the volume is up.</p>
+  </div>
+</section>
+
+<!-- SLEEP -->
+<section id="sleep" class="view" aria-label="Sleep" hidden>
+  <div class="topbar">
+    <button class="icon-btn" data-back type="button" aria-label="Back">
+      <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <h2>Sleep</h2>
+    <button class="icon-btn" id="btn-dim" type="button" aria-label="Dim the screen">
+      <svg viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+  <div class="now" aria-live="polite">
+    <div class="now-title" id="now-title">Pick a sound</div>
+    <div class="now-timer" id="now-timer"></div>
+  </div>
+  <div class="sounds" role="group" aria-label="Sleep sounds">
+    <button class="snd" data-sound="white" type="button"><b>White noise</b><small>Even hiss</small></button>
+    <button class="snd" data-sound="pink" type="button"><b>Pink noise</b><small>Soft rain</small></button>
+    <button class="snd" data-sound="brown" type="button"><b>Brown noise</b><small>Deep rumble</small></button>
+    <button class="snd" data-sound="womb" type="button"><b>Heartbeat</b><small>Like the womb</small></button>
+    <button class="snd" data-sound="shush" type="button"><b>Shushing</b><small>Shhh… shhh…</small></button>
+    <button class="snd" data-sound="brahms" type="button"><b>Brahms' Lullaby</b><small>Music box</small></button>
+    <button class="snd" data-sound="twinkle" type="button"><b>Twinkle Twinkle</b><small>Music box</small></button>
+    <button class="snd" data-sound="waves" type="button"><b>Ocean waves</b><small>Slow swells</small></button>
+  </div>
+  <div class="timer" role="group" aria-label="Sleep timer">
+    <span class="lbl">Timer</span>
+    <button type="button" data-timer="15">15</button>
+    <button type="button" data-timer="30" aria-pressed="true">30</button>
+    <button type="button" data-timer="45">45</button>
+    <button type="button" data-timer="60">60</button>
+    <button type="button" data-timer="0">Off</button>
+  </div>
+  <label class="vol">
+    <span aria-hidden="true">🔈</span>
+    <input type="range" min="0" max="100" step="1" data-volume aria-label="Volume">
+    <span aria-hidden="true">🔊</span>
+  </label>
+  <div class="sleep-actions">
+    <button class="big stop" id="btn-stop" type="button" disabled>Stop</button>
+  </div>
+  <label class="check"><input type="checkbox" id="wake"> Keep screen on (exact timer)</label>
+  <p class="silent-hint dim">Keep the phone a couple of metres away, never in the crib.</p>
+  <div class="dimmer" id="dimmer" hidden><span>Tap to wake</span></div>
+</section>
+
+<audio id="media" playsinline preload="auto"></audio>
+<script src="app.js"></script>
+</body>
+</html>
