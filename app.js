@@ -333,7 +333,7 @@ canvas.addEventListener('pointerdown', (e) => {
 
 /* Play: keep a silent looping <audio> going so iOS routes sound like media */
 function unlockMedia() {
-  if (view !== 'play' || !media.paused) return;
+  if ((view !== 'play' && view !== 'games') || !media.paused) return;
   media.loop = true; media.src = silentLoopUrl(); media.play().catch(() => {});
 }
 
@@ -602,17 +602,26 @@ let view = 'home';
 function show(v) {
   if (view === v) return;
   if (view === 'play') { stopAllPlay(); stopAnim(); if (!sleep.sound) media.pause(); }
+  if (view === 'games') { if (window.__games) window.__games.leave(); stopAllPlay(); if (!sleep.sound) media.pause(); }
   if (view === 'sleep') { stopSleep(); wantLock(false); $('#dimmer').hidden = true; }
   view = v; document.body.dataset.view = v;
-  for (const id of ['home', 'play', 'sleep']) $('#' + id).hidden = id !== v;
-  document.querySelector('meta[name=theme-color]').content = v === 'sleep' ? '#05070c' : '#111111';
+  for (const id of ['home', 'play', 'sleep', 'games']) $('#' + id).hidden = id !== v;
+  document.querySelector('meta[name=theme-color]').content = v === 'sleep' ? '#05070c' : v === 'games' ? '#fff4d6' : '#111111';
+  if (v === 'games' && window.__games) window.__games.enter();
   if (v === 'play') startAnim();
   if (v === 'sleep' && $('#wake').checked) wantLock(true);
   window.scrollTo(0, 0);
 }
-function route() { const h = location.hash.replace('#', ''); show(h === 'play' || h === 'sleep' ? h : 'home'); }
+function route() { const h = location.hash.replace('#', ''); show(h === 'play' || h === 'sleep' || h === 'games' ? h : 'home'); }
 $('#go-play').addEventListener('click', () => { ensureAudio(); location.hash = 'play'; });
 $('#go-sleep').addEventListener('click', () => { location.hash = 'sleep'; });
+$('#go-games').addEventListener('click', () => { ensureAudio(); location.hash = 'games'; });
+
+/* toddler-proofing: no pinch zoom, double-tap zoom or long-press menus */
+document.addEventListener('gesturestart', (e) => e.preventDefault());
+document.addEventListener('dblclick', (e) => e.preventDefault(), { passive: false });
+document.addEventListener('contextmenu', (e) => { if (view !== 'home') e.preventDefault(); });
+document.addEventListener('touchmove', (e) => { if (e.touches.length > 1 || (e.scale && e.scale !== 1)) e.preventDefault(); }, { passive: false });
 $$('[data-back]').forEach((b) => b.addEventListener('click', () => { if (history.length > 1 && location.hash) history.back(); else location.hash = ''; }));
 window.addEventListener('hashchange', route);
 window.addEventListener('resize', () => { if (view === 'play') resize(); });
@@ -627,6 +636,11 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
 }
 
 /* test/debug hooks (harmless in production) */
+window.__bsAudio = {
+  ensure() { ensureAudio(); unlockMedia(); return ctx; },
+  ctx: () => ctx, master: () => master, noise: () => noiseBuf, track, tone, chime, coo, bubbles, rattle, speak,
+  stopAll: stopAllPlay, lang: () => lang, PENTA,
+};
 window.__baby = {
   get activeNodes() { return active.size; },
   get mediaPlaying() { return !media.paused && !!media.src; },

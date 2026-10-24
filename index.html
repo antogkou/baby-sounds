@@ -36,6 +36,12 @@
       </span>
       <span class="mc-text"><strong>Sleep</strong><span>White noise, heartbeat, shushing, lullabies</span></span>
     </button>
+    <button class="mode-card games-card" id="go-games" type="button">
+      <span class="mc-art" aria-hidden="true">
+        <svg viewBox="0 0 100 100"><ellipse cx="38" cy="38" rx="20" ry="24" fill="#e53935"/><path d="M38 62 q4 14 -4 28" stroke="#5a4a2a" stroke-width="2" fill="none"/><ellipse cx="66" cy="46" rx="18" ry="22" fill="#1e88e5"/><path d="M66 68 q-4 12 4 24" stroke="#5a4a2a" stroke-width="2" fill="none"/><ellipse cx="31" cy="30" rx="5" ry="8" fill="#fff" opacity=".45"/><ellipse cx="60" cy="39" rx="4" ry="7" fill="#fff" opacity=".45"/><path d="M80 14l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="#fdd835"/></svg>
+      </span>
+      <span class="mc-text"><strong>Games</strong><span>For toddlers (2 yrs): balloons, animals, colours, counting</span></span>
+    </button>
   </div>
   <details class="safety" open>
     <summary>Safe listening</summary>
@@ -141,7 +147,27 @@
   <div class="dimmer" id="dimmer" hidden><span>Tap to wake</span></div>
 </section>
 
+<!-- GAMES (toddlers) -->
+<section id="games" class="view" aria-label="Games" hidden>
+  <div class="topbar">
+    <button class="icon-btn hold-btn" id="games-back" type="button" aria-label="Press and hold to go back">
+      <svg class="ring" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="21"/></svg>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <h2 id="games-title">Games</h2>
+    <div class="lang" role="group" aria-label="Voice language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="el" aria-pressed="false">ΕΛ</button>
+    </div>
+  </div>
+  <div class="hold-tip" id="hold-tip" hidden>Press and hold the arrow to go back</div>
+  <div class="game-menu" id="game-menu"></div>
+  <div class="game-area" id="game-area" hidden></div>
+</section>
+<canvas id="fx" aria-hidden="true"></canvas>
+
 <audio id="media" playsinline preload="auto"></audio>
 <script src="app.js"></script>
+<script src="games.js"></script>
 </body>
 </html>
